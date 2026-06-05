@@ -1,6 +1,6 @@
 ---
 name: dialectic-decision
-description: Use when the user explicitly asks for dialectic analysis, pro/con debate, adversarial review, 20-round contention, two-agent contest, 正反方博弈, 对抗分析, 深度推演, financial investment pressure-testing, or similar decision review.
+description: Use when the user explicitly asks for dialectic analysis, pro/con debate, adversarial review, 20-round contention, two-agent contest, 正反方博弈, 对抗分析, 深度推演, 投资判断, 买卖决策, 仓位风控, or similar decision review.
 ---
 
 # Dialectic Decision
@@ -52,7 +52,35 @@ Before analysis, confirm or infer only from user-provided facts:
 - User context: risk tolerance, existing position, portfolio concentration, capital at risk, liquidity needs, and max acceptable loss.
 - Data basis: latest price/action, valuation, financials, news, filings, macro/sector context, and source time.
 
-If the investment decision depends on current market data, verify up-to-date sources first. If current data cannot be checked, state the limitation and ask for source data or permission to proceed with a non-current framework-only analysis.
+If key fields are missing, ask this concise template before giving an actionable investment view:
+
+```markdown
+请先补充 4 个信息：
+
+1. 标的：代码 / 市场 / 资产类型
+2. 周期：短线 / 中线 / 长线
+3. 仓位：无仓 / 轻仓 / 重仓 / 占总资产比例
+4. 风险：最大可接受亏损比例或金额
+```
+
+### Current Data Rule
+
+If the investment decision depends on current price, valuation, filings, news, policy, rates, earnings, flows, or market regime, verify up-to-date sources before the contest. Cite or name the data time basis in the answer.
+
+If current data cannot be checked, do not give an actionable conclusion. Use `信息不足` or provide a framework-only analysis, and state exactly which data is missing.
+
+### Asset-Specific Checks
+
+Use the relevant checks during the contest:
+
+| Asset | Must Check |
+|---|---|
+| Stock | business quality, valuation, earnings, guidance, balance sheet, governance, liquidity, event risk |
+| ETF/Fund | index/strategy exposure, holdings concentration, fees, tracking error, liquidity, premium/discount, drawdown |
+| Bond | credit risk, duration, yield, rate sensitivity, issuer quality, liquidity, default/reinvestment risk |
+| Option/Future | leverage, margin, expiry, implied volatility, liquidity, path dependency, liquidation risk |
+| IPO | valuation, cornerstone/lockup, allocation, subscription heat, fundamentals, listing volatility |
+| Crypto | custody, liquidity, volatility, protocol/exchange/regulatory risk, leverage, weekend gap risk |
 
 ### Investment Contest Focus
 
@@ -79,6 +107,7 @@ Make the con side argue the strongest risk thesis:
 - Do not promise returns, certainty, insider knowledge, or guaranteed outcomes.
 - Do not present the answer as personalized financial advice unless enough user-specific suitability information is available and the user explicitly requests that framing.
 - Prefer "analysis conclusion" language over direct commands.
+- Do not output `买入` or `卖出` as a standalone conclusion. Always attach premise, position size, invalidation condition, and review/exit condition.
 - Use decision labels such as: `信息不足`, `不建议参与`, `谨慎观察`, `低仓位试错`, `分批参与`, `持有但设退出条件`, `减仓控制风险`.
 - Always include risk, position sizing, invalidation conditions, and exit/reevaluation triggers when giving an actionable investment view.
 - If the user asks for a trade and suitability data is missing, ask for the missing risk and portfolio context or provide only a general framework.
@@ -145,12 +174,25 @@ Rules:
 
 - Keep every round anchored to the same user question.
 - Maintain a private 20-item round ledger before answering. Each item should capture only the round focus and what changed: risk found, assumption revised, tradeoff clarified, or solution improved.
+- Structure the private ledger in four phases:
+  - Rounds 1-5: define the strongest thesis, goal, assumptions, and success criteria.
+  - Rounds 6-10: attack risks, hidden costs, failure modes, and missing information.
+  - Rounds 11-15: revise the thesis with constraints, mitigations, sizing, and fallback paths.
+  - Rounds 16-20: arbitrate, choose the best label, define conditions, and prepare the final answer.
 - Make each round add a new risk, clarification, tradeoff, correction, or stronger version of the solution.
 - Make the pro side respond to the strongest con-side objections.
 - Make the con side attack the improved proposal, not a stale version.
 - Stop early only if the user requested a lighter version, the decision is clearly too small for 20 rounds, or missing information makes meaningful contention impossible. If the user explicitly asks for 20 rounds, do not stop early unless the task is blocked by missing information.
 - Do not expose full hidden reasoning or a full transcript unless the user explicitly asks for a visible round-by-round summary.
 - Do not claim that 20 rounds were completed unless the private ledger was actually completed or both role-specific subagents returned adequate pressure-tested outputs.
+
+If the user asks to see the process, provide only a visible summary:
+
+- 4 phase summaries, not all hidden reasoning.
+- strongest pro point
+- strongest con point
+- key assumption that changed
+- final arbitration reason
 
 Use this internal checklist while arbitrating:
 
