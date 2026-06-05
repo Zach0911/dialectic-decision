@@ -1,6 +1,6 @@
 ---
 name: dialectic-decision
-description: Use when the user explicitly asks for dialectic analysis, pro/con debate, adversarial review, 20-round contention, two-agent contest, 正反方博弈, 对抗分析, 深度推演, or similar decision pressure-testing.
+description: Use when the user explicitly asks for dialectic analysis, pro/con debate, adversarial review, 20-round contention, two-agent contest, 正反方博弈, 对抗分析, 深度推演, financial investment pressure-testing, or similar decision review.
 ---
 
 # Dialectic Decision
@@ -8,6 +8,8 @@ description: Use when the user explicitly asks for dialectic analysis, pro/con d
 ## Overview
 
 Use this skill to pressure-test an important question, plan, or decision through an internal pro/con contest, then return a concise recommendation. Do not use it implicitly for ordinary questions or simple execution tasks.
+
+For financial investment decisions, use the financial investment mode below before running the contest.
 
 ## Trigger Rule
 
@@ -20,6 +22,8 @@ Use only when the user explicitly requests this style of reasoning, such as:
 - "做 20 轮推演"
 - "用反方质疑后给最佳方案"
 - "Use dialectic-decision"
+- "用正反方博弈判断这个投资"
+- "帮我压测是否买入/卖出/加仓/减仓"
 
 If the user does not explicitly request adversarial or dialectic analysis, do not invoke this skill.
 
@@ -33,6 +37,87 @@ Before starting the contest, check whether the task has enough information:
 - Success standard: what a good answer must achieve
 
 If any of these are missing and material to the decision, ask concise clarification questions first. Do not invent key business facts or silently expand scope.
+
+## Financial Investment Mode
+
+Use this mode when the explicit dialectic request concerns stocks, bonds, funds, ETFs, crypto, options, futures, IPOs, portfolios, allocation, buy/sell/hold decisions, adding/reducing positions, valuation, timing, or other investment choices.
+
+### Required Boundary Check
+
+Before analysis, confirm or infer only from user-provided facts:
+
+- Instrument: ticker/name, market, asset class, and whether leverage or derivatives are involved.
+- Decision: buy, sell, hold, add, reduce, subscribe, avoid, hedge, or compare.
+- Time horizon: intraday, short-term, medium-term, long-term, or unknown.
+- User context: risk tolerance, existing position, portfolio concentration, capital at risk, liquidity needs, and max acceptable loss.
+- Data basis: latest price/action, valuation, financials, news, filings, macro/sector context, and source time.
+
+If the investment decision depends on current market data, verify up-to-date sources first. If current data cannot be checked, state the limitation and ask for source data or permission to proceed with a non-current framework-only analysis.
+
+### Investment Contest Focus
+
+Make the pro side argue the strongest investment thesis:
+
+- upside drivers
+- valuation or expected return logic
+- catalyst path
+- risk/reward asymmetry
+- position sizing rationale
+- conditions that would strengthen the thesis
+
+Make the con side argue the strongest risk thesis:
+
+- downside scenarios
+- valuation overextension
+- liquidity, leverage, volatility, and drawdown risk
+- financial, regulatory, governance, macro, sector, and event risks
+- behavioral risks such as FOMO, anchoring, concentration, and averaging down
+- conditions that would invalidate the thesis
+
+### Compliance and Safety Boundaries
+
+- Do not promise returns, certainty, insider knowledge, or guaranteed outcomes.
+- Do not present the answer as personalized financial advice unless enough user-specific suitability information is available and the user explicitly requests that framing.
+- Prefer "analysis conclusion" language over direct commands.
+- Use decision labels such as: `信息不足`, `不建议参与`, `谨慎观察`, `低仓位试错`, `分批参与`, `持有但设退出条件`, `减仓控制风险`.
+- Always include risk, position sizing, invalidation conditions, and exit/reevaluation triggers when giving an actionable investment view.
+- If the user asks for a trade and suitability data is missing, ask for the missing risk and portfolio context or provide only a general framework.
+
+### Financial Output Format
+
+For investment decisions, use this format instead of the generic format:
+
+```markdown
+## 投资判断
+
+[信息不足 / 不建议参与 / 谨慎观察 / 低仓位试错 / 分批参与 / 持有但设退出条件 / 减仓控制风险]
+
+## 关键依据
+
+- [依据 1：数据、估值、基本面、催化或风险收益]
+- [依据 2]
+- [依据 3]
+
+## 反方最强质疑
+
+- [核心反方观点 1]
+- [核心反方观点 2]
+
+## 主要风险
+
+- [风险 1]
+- [风险 2]
+
+## 仓位与风控
+
+- 仓位：[建议区间或信息不足]
+- 失效条件：[什么发生时原判断失效]
+- 退出/复盘条件：[止损、止盈、事件、财报、价格区间或时间点]
+
+## 最终结论
+
+[一句话：在什么前提下，可以/不可以/谨慎参与]
+```
 
 ## Step 2: Set Roles
 
@@ -117,6 +202,7 @@ Before finalizing, verify:
 
 - The user explicitly triggered dialectic or adversarial analysis.
 - Missing background, goal, constraints, or success standard were either supplied or clarified.
+- For investment decisions, current data needs, suitability context, risk limits, and compliance boundaries were handled.
 - Pro and con roles were actually used, either through subagents or internal simulation.
 - A 20-round private ledger was completed, or early stop was explicitly justified.
 - The final answer does not expose the full hidden transcript by default.
@@ -130,3 +216,5 @@ Before finalizing, verify:
 - Do not let the con side make generic objections; require concrete risks.
 - Do not let the pro side repeat benefits without answering objections.
 - Do not end with "both options are fine"; choose a direction or name the exact missing decision input.
+- Do not give investment conclusions from stale or missing data without clearly labeling the limitation.
+- Do not omit position sizing, invalidation conditions, and exit/reevaluation triggers for actionable investment views.
